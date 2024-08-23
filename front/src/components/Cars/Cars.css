@@ -1,0 +1,29 @@
+.car-catalog {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.car-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.car-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.car-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.car-details {
+    margin-top: 10px;
+}
