@@ -20,6 +20,13 @@ export default function Car() {
 
     if (error) return <p>{error}</p>;
     if (!car) return <p>Loading...</p>;
+
+    // const handleBuy = async (e) => {
+    //     try {
+    //         const response
+    //     }
+    // }
+
     return (
         <div className="car-detail">
             <h1>{car.name}</h1>
@@ -28,6 +35,7 @@ export default function Car() {
             <p><strong>Doors:</strong> {car.doors}</p>
             <p><strong>Seats:</strong> {car.seats}</p>
             <p><strong>Price:</strong> ${car.price}</p>
+            {/* <button onClick={handleBuy}>BUY</button> */}
         </div>
     );
 }

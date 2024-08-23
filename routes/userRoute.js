@@ -8,7 +8,7 @@ router.put('/update/:id', userController.updateUser)
 
 
 //Connection management
-router.get('/login', userController.Login);
-router.get('/register', userController.Register);
+router.post('/login', userController.Login);
+router.post('/register', userController.Register);
 
 module.exports = router;

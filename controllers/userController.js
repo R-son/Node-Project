@@ -28,16 +28,14 @@ exports.Register = async (req, res) => {
         const {username, email, password} = req.body;
         const conn = await db.pool.getConnection();
         const result = await conn.query('SELECT * FROM Users WHERE email = ?', [email]);
-        conn.release();
-        if (result.lenght > 0)
-            return res.status(400).json({error: 'This email is already associated to another account'});
+        console.log(result);
+        if (result[0])
+            return res.status(401).send('This email is already associated to another account');
         const hashedPwd = await bcrypt.hash(password, 10);
         await conn.query(
-            "INSERT INTO Users (username, email, password) VALUES (?, ?, ?)",
+            "INSERT INTO Users (name, email, password) VALUES (?, ?, ?)",
             [username, email, hashedPwd]
         );
-        const insertedId = result.insertId.toString();
-        res.status(201).json({ id: insertedId });
         conn.release();
         const token = jwt.sign({email}, process.env.API_KEY, { expiresIn: '1h'});
         res.status(200).json({token});

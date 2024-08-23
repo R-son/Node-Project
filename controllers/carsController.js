@@ -116,3 +116,7 @@ exports.deleteCarById = async (req, res) => {
         res.status(500).json({ error: 'Failed to delete car' });
     }
 };
+
+// exports.purchase = async (req, res) => {
+//     const 
+// }

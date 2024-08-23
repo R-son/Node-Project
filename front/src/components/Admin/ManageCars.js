@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ManageCars.css';
+import {jwtDecode} from 'jwt-decode';
 
 export default function ManageCars() {
+    const token = localStorage.getItem('token');
     const [cars, setCars] = useState([]);
     const [selectedCars, setSelectedCars] = useState([]);
     const [error, setError] = useState(null);
@@ -17,23 +19,45 @@ export default function ManageCars() {
     });
 
     useEffect(() => {
-        const fetchCars = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/api/cars');
-                console.log('API Response:', response.data);
-
-                if (Array.isArray(response.data)) {
-                    setCars(response.data);
-                } else {
-                    setError('Unexpected data format');
+        if (token) {
+            const fetchCars = async () => {
+                try {
+                    const response = await axios.get('http://localhost:3001/api/cars');
+                    console.log('API Response:', response.data);
+                    
+                    if (Array.isArray(response.data)) {
+                        setCars(response.data);
+                    } else {
+                        setError('Unexpected data format');
+                    }
+                } catch (err) {
+                    setError('Failed to load cars.');
                 }
-            } catch (err) {
-                setError('Failed to load cars.');
             }
+            fetchCars();
         };
+    }, [token]);
+    
+    if (!token) {
+        return (
+            <div>
+                <h1>You are not logged in</h1>
+            </div>
+        )
+    }
 
-        fetchCars();
-    }, []);
+    const decodedToken = jwtDecode(token);
+    const userRole = decodedToken.role;
+    
+    if (userRole != 'admin') {
+        return (
+            <div>
+                <h1>You do not have the right permissions</h1>
+            </div>
+        )
+    }
+
+    console.log(userRole);
 
     const handleSelectCar = (id) => {
         setSelectedCars(prevSelected => {
@@ -159,7 +183,7 @@ export default function ManageCars() {
                                 />
                             </td>
                             <td>
-                                <img src={car.img} alt={car.name} className="car-image" />
+                                <img src={`http://localhost:3001/${car.img}`} alt={car.name} className="car-image" />
                             </td>
                             <td>{car.name}</td>
                             <td>{car.engine}</td>
